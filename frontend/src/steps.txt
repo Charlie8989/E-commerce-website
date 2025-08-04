@@ -1,0 +1,21 @@
+first create vite project
+install dependencies for frontend---->react-router-dom and react-toastify
+now create folders as per use in src folder, first crrated pages folder inside that i created 9 pages
+then we added navbar in components folder
+we used navlink for refering from one to another. it provides us an active classname which we can use for underline
+we created hamburger using state variable 
+we created shop context.jsx to store context using create context
+now ourpolicy then newsletter and then footer
+we are creating collection page 
+now we are creating related products after products page, we are filtering using category and subcategory
+now creating add to cart functionality,structuredClon to create a copy, ek baar addtocart function dekhna
+now going to change cart count
+we are creating update quantity to mke the bin icon works doing the cart icon increase in cart.jsx 59 line we did update in number as anyone change the input field
+we created a func which give us totalamount and now we r creating a place order button we r using usenavigate to navigate from one to another stopped at 4:36:01
+we created login page then where hides the name input field using usestate
+on logging in or sgning up it is reloading the page to avoid this we r going to make a onsubmit handler function
+we r creating cntact page now 
+we forgo the sorting in collection page o going back for it and adding missing features and search bar
+we  created a toggl finction which creates array of categories selcted so we store them and filter product using these.
+i was stuck in subcategory filter for 15 min after debuggng and chatgpt found the case sensitivity one is in lower case other is in small so fixed it using map
+frontend done : 5:10:19 the stupid thing i did is i move the node modules and package json to frontend which are initially in global directory now i created new folder e commerce website and copy the content after initializing vite project and installing dependencies

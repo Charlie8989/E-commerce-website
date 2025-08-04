@@ -1,5 +1,6 @@
-import userModel from "../models/userModel.js";
+import userModel from "../models/UserModel.js";
 
+userModel
 const getUserCart = async (req, res) => {
   try {
     const { userId } = req.body;

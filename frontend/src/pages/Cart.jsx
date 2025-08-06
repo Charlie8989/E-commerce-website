@@ -106,7 +106,7 @@ const Cart = () => {
               className="bg-black cursor-pointer text-white text-sm my-8 px-8 py-3"
               onClick={() => navigate("/place-order")}
             >
-              PROCEED TO CHECKOUT
+              PROCEED TO FUCK
             </button>
           </div>
         </div>

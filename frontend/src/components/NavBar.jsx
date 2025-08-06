@@ -78,12 +78,18 @@ const NavBar = () => {
               </div>
             )}
           </div>
-          <Link to="/cart" className="relative">
-            <img src={assets.cart_icon} className="w-5 cursor-pointer" alt="" />
-            <p className="text-white text-xs bg-red-600 rounded-full absolute w-4 text-center leading-4 aspect-square right-[-7px] top-[-3px]">
-              {getcartCount()}
-            </p>
-          </Link>
+          {token && (
+            <Link to="/cart" className="relative">
+              <img
+                src={assets.cart_icon}
+                className="w-5 cursor-pointer"
+                alt=""
+              />
+              <p className="text-white text-xs bg-red-600 rounded-full absolute w-4 text-center leading-4 aspect-square right-[-7px] top-[-3px]">
+                {getcartCount()}
+              </p>
+            </Link>
+          )}
           <img
             onClick={() => setVisible(true)}
             src={assets.menu_icon}

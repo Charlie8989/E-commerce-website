@@ -33,9 +33,8 @@ const PlaceOrder = () => {
 
   const onchangeHandler = (e) => {
     const name = e.target.name;
-    const value = e.target.value;
-
-    setFormData((data) => ({ ...data, [name]: value }));
+    const value = e.target.value;  
+      setFormData((data) => ({ ...data, [name]: value }));
   };
 
   const initPay = (order) => {
@@ -74,6 +73,9 @@ const PlaceOrder = () => {
 
   const onSubmithandler = async (e) => {
     e.preventDefault();
+    if(formData.phone.length!=10){
+        toast.error("Please Enter 10 Digits Phone Number")
+    }
     try {
       let orderItems = [];
 
@@ -151,7 +153,7 @@ const PlaceOrder = () => {
   return (
     <form
       onSubmit={onSubmithandler}
-      className="flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min-h-[80vh] border-t"
+      className="px-10 sm:px-0 flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min-h-[80vh] border-t"
     >
       {/* left side */}
       <div className="flex flex-col gap-4 w-full sm:max-w-[480px]">

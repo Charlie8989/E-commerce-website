@@ -208,7 +208,7 @@ const Add = ({ token }) => {
             onClick={() =>
               setSizes((prev) =>
                 prev.includes("M")
-                  ? prev.filter((item) => item !== "S")
+                  ? prev.filter((item) => item !== "M")
                   : [...prev, "M"]
               )
             }
@@ -225,7 +225,7 @@ const Add = ({ token }) => {
             onClick={() =>
               setSizes((prev) =>
                 prev.includes("L")
-                  ? prev.filter((item) => item !== "S")
+                  ? prev.filter((item) => item !== "L")
                   : [...prev, "L"]
               )
             }
@@ -242,7 +242,7 @@ const Add = ({ token }) => {
             onClick={() =>
               setSizes((prev) =>
                 prev.includes("XL")
-                  ? prev.filter((item) => item !== "S")
+                  ? prev.filter((item) => item !== "XL")
                   : [...prev, "XL"]
               )
             }
@@ -262,7 +262,7 @@ const Add = ({ token }) => {
             onClick={() =>
               setSizes((prev) =>
                 prev.includes("XXL")
-                  ? prev.filter((item) => item !== "S")
+                  ? prev.filter((item) => item !== "XXL")
                   : [...prev, "XXL"]
               )
             }

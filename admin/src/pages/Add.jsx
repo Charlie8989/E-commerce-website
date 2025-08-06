@@ -175,12 +175,12 @@ const Add = ({ token }) => {
         <div>
           <p className="mb-2">Product Price</p>
           <input
+            required
             onChange={(e) => setPrice(e.target.value)}
             value={price}
             type="number"
             className="w-full px-3 py-2 sm:w-[120px]"
             placeholder="99"
-            required
           />
         </div>
       </div>

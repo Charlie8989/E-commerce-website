@@ -15,8 +15,8 @@ const NavBar = () => {
     setcartItems({});
   };
   const { getcartCount } = useContext(ShopContext);
-  console.log("photoURL value:", user?.photoURL);
-  console.log("user from context:", user);
+  // console.log("photoURL value:", user?.photoURL);
+  // console.log("user from context:", user);
   return (
     <div>
       <div className="font-medium flex items-center justify-between py-5 px-5 backdrop-blur-md">

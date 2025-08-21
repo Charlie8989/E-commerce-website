@@ -56,7 +56,7 @@ const NavBar = () => {
             <div className="group relative">
               <img
                 onClick={() => setOpen((prev) => !prev)}
-                src={user.photoURL}
+                src={user?user.photoURL:assets.profile_icon}
                 alt="profile"
                 className={
                   user

@@ -53,7 +53,7 @@ const NavBar = () => {
             <div className="group relative">
               <img
                 onClick={() => (token ? null : navigate("/login"))}
-                src={user.photoURL}
+                src={user ? user.photoURL : assets.profile_icon}
                 alt="profile"
                 className="w-8 h-8 rounded-full border border-gray-300"
               />

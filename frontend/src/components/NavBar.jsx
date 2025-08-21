@@ -5,7 +5,7 @@ import { ShopContext } from "../context/ShopContext";
 
 const NavBar = () => {
   const [visible, setVisible] = useState(false);
-  const { setShowSearch, navigate, token, setToken, setcartItems,user } =
+  const { setShowSearch, navigate, token, setToken, setcartItems, user } =
     useContext(ShopContext);
   const logOut = () => {
     navigate("/login");
@@ -49,13 +49,37 @@ const NavBar = () => {
             className="w-5 cursor-pointer"
             alt=""
           />
-          {user ? (
-            <div className="flex items-center gap-3">
+          {token ? (
+            <div className="group relative">
               <img
+                onClick={() => (token ? null : navigate("/login"))}
                 src={user.photoURL}
                 alt="profile"
                 className="w-8 h-8 rounded-full border border-gray-300"
               />
+              {token && (
+                <div className="group-hover:block hidden absolute dropdown-menu pt-4 right-0">
+                  <div className="flex flex-col w-36 bg-slate-100 py-3 px-5 text-gray-500 rounded-xl gap-2">
+                    <p className="hover:text-black cursor-pointer">
+                      My Profile
+                    </p>
+                    <hr className="rounded-xl" />
+                    <p
+                      className="hover:text-black cursor-pointer"
+                      onClick={() => navigate("/orders")}
+                    >
+                      Orders
+                    </p>
+                    <hr className="rounded-xl" />
+                    <p
+                      onClick={logOut}
+                      className="hover:text-red-600 cursor-pointer"
+                    >
+                      Log Out
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="group relative">

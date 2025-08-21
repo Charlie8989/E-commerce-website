@@ -20,7 +20,7 @@ const Login = () => {
   useEffect(() => {
     getRedirectResult(auth)
       .then((result) => {
-        console.log("Redirect result:", result);
+        // console.log("Redirect result:", result);
       })
       .catch((error) => console.error("Redirect error:", error));
   }, []);

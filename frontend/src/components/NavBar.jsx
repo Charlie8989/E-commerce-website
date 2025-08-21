@@ -53,9 +53,13 @@ const NavBar = () => {
             <div className="group relative">
               <img
                 onClick={() => (token ? null : navigate("/login"))}
-                src={user ? user.photoURL : assets.profile_icon}
+                src={token ? user.photoURL : assets.profile_icon}
                 alt="profile"
-                className="w-8 h-8 rounded-full border border-gray-300"
+                className={
+                  token
+                    ? "w-8 h-8 rounded-full border border-gray-300" 
+                    : "w-5 cursor-pointer" 
+                }
               />
               {token && (
                 <div className="group-hover:block hidden absolute dropdown-menu pt-4 right-0">

@@ -57,9 +57,6 @@ const NavBar = () => {
                   if (!token) {
                     navigate("/login");
                   }
-                  if (window.innerWidth < 640) {
-                    setDropdownOpen(!dropdownOpen);
-                  }
                 }}
                 src={user ? user.photoURL : assets.profile_icon}
                 alt="profile"
@@ -70,13 +67,7 @@ const NavBar = () => {
                 }
               />
               {token && (
-                <div
-                  className={`
-        absolute dropdown-menu pt-4 right-0
-        hidden sm:group-hover:block
-        ${dropdownOpen ? "block" : ""}
-      `}
-                >
+                <div className="hidden group-hover:block absolute dropdown-menu pt-4 right-0">
                   <div className="flex flex-col w-36 bg-slate-100 py-3 px-5 text-gray-500 rounded-xl gap-2">
                     <p className="hover:text-black cursor-pointer">
                       My Profile

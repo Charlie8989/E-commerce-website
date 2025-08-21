@@ -53,10 +53,10 @@ const NavBar = () => {
             alt=""
           />
           {token ? (
-            <div className="group relative">
+            <div className="relative">
               <img
                 onClick={() => setOpen((prev) => !prev)}
-                src={user?user.photoURL:assets.profile_icon}
+                src={user ? user.photoURL : assets.profile_icon}
                 alt="profile"
                 className={
                   user
@@ -64,9 +64,9 @@ const NavBar = () => {
                     : "w-5 cursor-pointer"
                 }
               />
-              {(open || false) && (
-                <div className="hidden group-hover:block absolute dropdown-menu pt-4 right-0">
-                  <div className="flex flex-col w-36 bg-slate-100 py-3 px-5 text-gray-500 rounded-xl gap-2">
+              {open && (
+                <div className="absolute dropdown-menu pt-4 right-0 z-50">
+                  <div className="flex flex-col w-36 bg-slate-100 py-3 px-5 text-gray-500 rounded-xl gap-2 shadow-lg">
                     <p className="hover:text-black cursor-pointer">
                       My Profile
                     </p>
@@ -89,36 +89,13 @@ const NavBar = () => {
               )}
             </div>
           ) : (
-            <div className="group relative">
+            <div className="relative">
               <img
-                onClick={() => (token ? null : navigate("/login"))}
+                onClick={() => navigate("/login")}
                 src={assets.profile_icon}
                 className="w-5 cursor-pointer"
-                alt=""
+                alt="profile"
               />
-              {token && (
-                <div className="group-hover:block hidden absolute dropdown-menu pt-4 right-0">
-                  <div className="flex flex-col w-36 bg-slate-100 py-3 px-5 text-gray-500 rounded-xl gap-2">
-                    <p className="hover:text-black cursor-pointer">
-                      My Profile
-                    </p>
-                    <hr className="rounded-xl" />
-                    <p
-                      className="hover:text-black cursor-pointer"
-                      onClick={() => navigate("/orders")}
-                    >
-                      Orders
-                    </p>
-                    <hr className="rounded-xl" />
-                    <p
-                      onClick={logOut}
-                      className="hover:text-red-600 cursor-pointer"
-                    >
-                      Log Out
-                    </p>
-                  </div>
-                </div>
-              )}
             </div>
           )}
 

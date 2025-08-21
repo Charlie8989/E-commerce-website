@@ -2,6 +2,8 @@ import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebase";
 
 // import { products } from "../assets/assets"; //BECAUSE NOW WE ARE GETTING PRODUCT FROM API ADMIN PORTAL
 import { toast } from "react-toastify";
@@ -20,6 +22,15 @@ const ShopContextProvider = (props) => {
   const [products, setProducts] = useState([]);
   const [token, setToken] = useState("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const addToCart = async (itemId, size) => {
     let cartData = structuredClone(cartItems);
@@ -124,6 +135,7 @@ const ShopContextProvider = (props) => {
 
   const getProductsData = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(backendURL + "/api/product/list");
       // console.log(response.data)
       if (response.data.success) {
@@ -134,6 +146,8 @@ const ShopContextProvider = (props) => {
     } catch (error) {
       toast.error(error.message);
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -142,7 +156,7 @@ const ShopContextProvider = (props) => {
       const response = await axios.post(
         backendURL + "/api/cart/get",
         {},
-        { headers: {token} }
+        { headers: { token } }
       );
       if (response.data.success) {
         setcartItems(response.data.cartData);
@@ -152,6 +166,11 @@ const ShopContextProvider = (props) => {
       toast.error(error.message);
     }
   };
+  useEffect(() => {
+    if (token) {
+      getUserCart(token);
+    }
+  }, [token]);
 
   useEffect(() => {
     getProductsData();
@@ -182,6 +201,9 @@ const ShopContextProvider = (props) => {
     backendURL,
     token,
     setToken,
+    getProductsData,
+    loading,
+    user
   };
   return (
     <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>

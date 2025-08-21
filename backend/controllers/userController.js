@@ -7,6 +7,37 @@ const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET);
 };
 
+export const gLogin = async (req, res) => {
+  try {
+    const { email, name, profilePic } = req.body;
+    console.log("Incoming Google login:", req.body);
+
+    let user = await userModel.findOne({ email });
+
+    if (!user) {
+      user = new userModel({
+        email,
+        name: name || "Google User",
+        profilePic,
+      });
+      await user.save();
+    }
+
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET || "fallbacksecret",
+      {
+        expiresIn: "7d",
+      }
+    );
+
+    res.json({ success: true, token });
+  } catch (err) {
+    console.error("🔥 Google login error:", err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;

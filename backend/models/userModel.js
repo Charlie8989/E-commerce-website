@@ -4,8 +4,9 @@ const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String },
     cartData: { type: Object, default: {} },
+    profilePic: { type: String },
   },
   { minimize: false } //we use minimize cuz if we did'nt use this then empty cartData waala account nhi bnega
 );

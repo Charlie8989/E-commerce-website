@@ -5,6 +5,7 @@ import { ShopContext } from "../context/ShopContext";
 
 const NavBar = () => {
   const [visible, setVisible] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const { setShowSearch, navigate, token, setToken, setcartItems, user } =
     useContext(ShopContext);
   const logOut = () => {
@@ -52,17 +53,30 @@ const NavBar = () => {
           {token ? (
             <div className="group relative">
               <img
-                onClick={() => (token ? null : navigate("/login"))}
-                src={token ? user?.photoURL : assets.profile_icon}
+                onClick={() => {
+                  if (!token) {
+                    navigate("/login");
+                  }
+                  if (window.innerWidth < 640) {
+                    setDropdownOpen(!dropdownOpen);
+                  }
+                }}
+                src={user ? user.photoURL : assets.profile_icon}
                 alt="profile"
                 className={
-                  token
+                  user
                     ? "w-8 h-8 rounded-full border border-gray-300"
                     : "w-5 cursor-pointer"
                 }
               />
               {token && (
-                <div className="group-hover:block hidden absolute dropdown-menu pt-4 right-0">
+                <div
+                  className={`
+        absolute dropdown-menu pt-4 right-0
+        hidden sm:group-hover:block
+        ${dropdownOpen ? "block" : ""}
+      `}
+                >
                   <div className="flex flex-col w-36 bg-slate-100 py-3 px-5 text-gray-500 rounded-xl gap-2">
                     <p className="hover:text-black cursor-pointer">
                       My Profile

@@ -38,7 +38,7 @@ const LatestCollection = () => {
             .map((_, i) => (
               <div
                 key={i}
-                className="animate-pulse bg-gray-200 h-48 rounded-lg"
+                className="animate-pulse bg-gray-200 h-60 rounded-lg"
               ></div>
             ))}
         </div>

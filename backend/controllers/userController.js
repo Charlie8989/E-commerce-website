@@ -10,7 +10,7 @@ const createToken = (id) => {
 export const gLogin = async (req, res) => {
   try {
     const { email, name, profilePic } = req.body;
-    console.log("Incoming Google login:", req.body);
+    // console.log("Incoming Google login:", req.body);
 
     let user = await userModel.findOne({ email });
 
@@ -33,7 +33,7 @@ export const gLogin = async (req, res) => {
 
     res.json({ success: true, token });
   } catch (err) {
-    console.error("🔥 Google login error:", err);
+    // console.error("🔥 Google login error:", err);
     res.status(500).json({ success: false, message: err.message });
   }
 };

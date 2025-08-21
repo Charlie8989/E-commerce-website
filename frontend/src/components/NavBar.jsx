@@ -15,6 +15,8 @@ const NavBar = () => {
     setcartItems({});
   };
   const { getcartCount } = useContext(ShopContext);
+  console.log("photoURL value:", user?.photoURL);
+  console.log("user from context:", user);
   return (
     <div>
       <div className="font-medium flex items-center justify-between py-5 px-5 backdrop-blur-md">
@@ -54,7 +56,7 @@ const NavBar = () => {
             <div className="group relative">
               <img
                 onClick={() => setOpen((prev) => !prev)}
-                src={user ? user.photoURL : assets.profile_icon}
+                src={user.photoURL}
                 alt="profile"
                 className={
                   user

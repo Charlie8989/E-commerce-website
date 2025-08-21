@@ -50,6 +50,7 @@ const loginUser = async (req, res) => {
         success: false,
       });
     }
+ 
 
     const isMatch = await bcrypt.compare(password, user.password);
 

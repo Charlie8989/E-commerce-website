@@ -11,6 +11,7 @@ const ProductItems = ({ id, image, name, price }) => {
           <img
             className="hover:scale-110 rounded-2xl"
             src={image[0]}
+            loading="lazy"
             alt=""
           />
         </div>

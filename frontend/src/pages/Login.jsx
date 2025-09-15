@@ -30,7 +30,7 @@ const Login = () => {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
 
-    // Send to backend
+    
     const response = await axios.post(backendURL + "/api/user/google-login", {
       email: user.email,
       name: user.displayName,

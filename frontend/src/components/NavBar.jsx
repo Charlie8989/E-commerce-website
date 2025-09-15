@@ -67,7 +67,10 @@ const NavBar = () => {
               {open && (
                 <div className="absolute dropdown-menu pt-4 right-0 z-50">
                   <div className="flex flex-col w-36 bg-slate-100 py-3 px-5 text-gray-500 rounded-xl gap-2 shadow-lg">
-                    <p className="hover:text-black cursor-pointer">
+                    <p
+                      className="hover:text-black cursor-pointer"
+                      onClick={() => navigate("/profile")}
+                    >
                       My Profile
                     </p>
                     <hr className="rounded-xl" />

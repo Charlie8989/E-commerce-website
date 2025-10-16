@@ -15,6 +15,7 @@ import { ToastContainer, toast } from "react-toastify";
 import SearchBar from "./components/SearchBar";
 import Verify from "./pages/Verify";
 import Profile from "./pages/Profile";
+import ScrollToTop from "./components/ScrollToTop";
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
       <ToastContainer />
       <NavBar />
       <SearchBar />
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/collection" element={<Collection />} />

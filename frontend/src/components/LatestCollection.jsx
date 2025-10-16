@@ -2,9 +2,10 @@ import React, { useEffect, useState, useContext } from "react";
 import { ShopContext } from "../context/ShopContext";
 import Title from "./Title";
 import ProductItems from "./ProductItems";
+import SkeletonProduct from "./SkeletonProduct";
 
 const LatestCollection = () => {
-  const { products, getProductsData, loading } = useContext(ShopContext);
+  const { products, getProductsData } = useContext(ShopContext);
 
   const [latestproducts, setlatestproducts] = useState([]);
 
@@ -24,24 +25,26 @@ const LatestCollection = () => {
     <div className="my-10">
       <div className="text-center">
         <Title text1="LATEST COLLECTION" />
-        <p className="mb-10 text-md noto-regular text-[#61615e] font-medium text-center">
+        <p className="mb-10 text-md px-2 noto-regular text-[#61615e] font-medium text-center">
           Step into elegance with our latest arrivals — where every piece tells
           a story of style and grace.
         </p>
       </div>
 
-      {/* Rendering products */}
-        <div className="grid grid-cols-2 mx-7 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6">
-          {latestproducts.map((item) => (
-            <ProductItems
-              key={item._id}
-              id={item._id}
-              image={item.image}
-              name={item.name}
-              price={item.price}
-            />
-          ))}
-        </div>
+      {/* Rendering products or skeletons */}
+      <div className="grid grid-cols-2 mx-7 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6">
+        {products.length === 0
+          ? Array.from({ length: 10 }).map((_, idx) => <SkeletonProduct key={idx} />)
+          : latestproducts.map((item) => (
+              <ProductItems
+                key={item._id}
+                id={item._id}
+                image={item.image}
+                name={item.name}
+                price={item.price}
+              />
+            ))}
+      </div>
     </div>
   );
 };

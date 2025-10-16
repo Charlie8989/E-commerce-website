@@ -9,10 +9,9 @@ const ProductItems = ({ id, image, name, price }) => {
       <div className="my-3">
         <div className="overflow-hidden">
           <img
-            className="hover:scale-110 rounded-2xl"
+            className="hover:scale-110 transition-transform duration-300 rounded-2xl"
             src={image[0]}
             loading="lazy"
-            alt=""
           />
         </div>
         <p className="pt-3 pb-1 text-sm">{name}</p>

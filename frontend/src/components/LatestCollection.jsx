@@ -31,18 +31,6 @@ const LatestCollection = () => {
       </div>
 
       {/* Rendering products */}
-      {loading ? (
-        <div className="grid grid-cols-2 mx-7 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6">
-          {Array(10)
-            .fill()
-            .map((_, i) => (
-              <div
-                key={i}
-                className="animate-pulse bg-gray-200 h-60 rounded-lg"
-              ></div>
-            ))}
-        </div>
-      ) : (
         <div className="grid grid-cols-2 mx-7 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6">
           {latestproducts.map((item) => (
             <ProductItems
@@ -54,7 +42,6 @@ const LatestCollection = () => {
             />
           ))}
         </div>
-      )}
     </div>
   );
 };

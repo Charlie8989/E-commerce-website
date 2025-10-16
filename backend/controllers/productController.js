@@ -28,11 +28,7 @@ const addProduct = async (req, res) => {
         let result = await cloudinary.uploader.upload(item.path, {
           resource_type: "image",
         });
-        const transformedUrl = result.secure_url.replace(
-          "/upload/",
-          "/upload/w_300,q_auto,f_auto/"
-        );
-        return transformedUrl;
+        return result.secure_url;
       })
     );
 

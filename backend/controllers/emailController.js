@@ -35,7 +35,7 @@ export const sendDiscountEmail = async (req, res) => {
     <!-- Body -->
     <div style="padding: 20px;">
       <p style="font-size: 16px; color: #504B38; margin-bottom: 15px;">
-        We're thrilled to have you as part of the <strong>Trendora family</strong> ❤️
+        We're thrilled to have you as part of the <strong>Trendora family</strong> ✨
       </p>
       <p style="font-size: 16px; color: #504B38; margin-bottom: 15px;">
         Here’s a special <strong>exclusive discount code</strong> just for you:

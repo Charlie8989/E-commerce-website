@@ -6,6 +6,6 @@ export const transporter = nodemailer.createTransport({
   secure: true, // true for 465, false for other ports
   auth: {
     user: "trendora.charlie@gmail.com",
-    pass: "nkzr emlq cwjx fipa",
+    pass: "tzey fnrk plfi exma",
   },
 });

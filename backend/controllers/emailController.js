@@ -22,7 +22,7 @@ export const sendDiscountEmail = async (req, res) => {
     const info = await transporter.sendMail({
       from: '"Trendora :" <trendora.charlie@gmail.com>',
       to: email,
-      subject: "Your Exclusive Trendora Discount Code ✨",
+      subject: "Your Exclusive Trendora Discount Code",
       html: `
  <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #F8F3D9; padding: 20px 0; text-align: center;">
   <div style="max-width: 600px; background: #ffffff; margin: auto; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); overflow: hidden;">

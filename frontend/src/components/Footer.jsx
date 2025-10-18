@@ -30,7 +30,7 @@ const Footer = () => {
       </div>
       <hr />
       <p className="text-[#504B38] text-center py-5 text-sm">
-        Copyright2025@trendora.com-All Right Reserved
+        Code by CHARLIE ❤️
       </p>
     </div>
   );

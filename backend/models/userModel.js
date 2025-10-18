@@ -7,6 +7,15 @@ const userSchema = new mongoose.Schema(
     password: { type: String },
     cartData: { type: Object, default: {} },
     profilePic: { type: String },
+    coupons: {
+      type: [
+        {
+          code: String,
+          expiresAt: Date,
+        },
+      ],
+      default: [],
+    },
   },
   { minimize: false } //we use minimize cuz if we did'nt use this then empty cartData waala account nhi bnega
 );

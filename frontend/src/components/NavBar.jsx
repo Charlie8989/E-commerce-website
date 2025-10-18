@@ -56,7 +56,7 @@ const NavBar = () => {
             <div className="relative">
               <img
                 onClick={() => setOpen((prev) => !prev)}
-                src={user ? user.photoURL : assets.profile_icon}
+                src={user ? user?.photoURL : assets.profile_icon}
                 alt="profile"
                 className={
                   user
@@ -67,22 +67,27 @@ const NavBar = () => {
               {open && (
                 <div className="absolute dropdown-menu pt-4 right-0 z-50">
                   <div className="flex flex-col w-36 bg-slate-100 py-3 px-5 text-gray-500 rounded-xl gap-2 shadow-lg">
-                    <p
+                    <NavLink
                       className="hover:text-black cursor-pointer"
-                      onClick={() => navigate("/profile")}
+                      onClick={() => setOpen(false)}
+                      to="/profile"
                     >
                       My Profile
-                    </p>
+                    </NavLink>
                     <hr className="rounded-xl" />
                     <p
                       className="hover:text-black cursor-pointer"
-                      onClick={() => navigate("/orders")}
+                      onClick={() => setOpen(false)}
+                      to="/orders"
                     >
                       Orders
                     </p>
                     <hr className="rounded-xl" />
                     <p
-                      onClick={logOut}
+                      onClick={() => {
+                        logOut();
+                        setOpen(false);
+                      }}
                       className="hover:text-red-600 cursor-pointer"
                     >
                       Log Out

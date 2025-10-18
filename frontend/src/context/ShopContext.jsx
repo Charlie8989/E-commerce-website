@@ -151,6 +151,21 @@ const ShopContextProvider = (props) => {
     }
   };
 
+  const sendDiscountEmail = async (email) => {
+    try {
+      const response = await axios.post(
+        backendURL + "/api/email/discount",
+        {email}
+      );
+      if (response.data.success) {
+       toast.success("Discount email sent successfully!");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
+
   const getUserCart = async (token) => {
     try {
       const response = await axios.post(
@@ -203,7 +218,8 @@ const ShopContextProvider = (props) => {
     setToken,
     getProductsData,
     loading,
-    user
+    user,
+    sendDiscountEmail,
   };
   return (
     <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>

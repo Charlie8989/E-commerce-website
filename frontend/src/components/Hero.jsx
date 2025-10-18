@@ -27,6 +27,7 @@ const Hero = () => {
           src={assets.hero_2}
           className="rounded-xl sm:rounded-2xl w-full h-auto object-cover"
           alt=""
+          loading="lazy"
         />
       </div>
     </div>

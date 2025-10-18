@@ -1,13 +1,31 @@
 import React from "react";
 import { toast, ToastContainer } from "react-toastify";
+import { ShopContext } from "../context/ShopContext";
+import { useContext } from "react";
+import { useState } from "react";
+import { Loader } from "lucide-react";
 
 const Newsletter = () => {
-  const OnSubmitHandler = (event) => {
+  const [loading, setLoading] = useState(false);
+  const { sendDiscountEmail } = useContext(ShopContext);
+
+  const OnSubmitHandler = async (event) => {
     event.preventDefault();
     const email = event.target.email.value;
+
     if (!email) {
       toast.error("Enter Email....");
       return;
+    }
+
+    try {
+      setLoading(true);
+      await sendDiscountEmail(email);
+      toast.success("Discount email sent!");
+    } catch (error) {
+      toast.error("Failed to send email");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -18,10 +36,10 @@ const Newsletter = () => {
           Subscribe Now And Get 20% Off
         </div>
         <p className="text-md text-[#504B38]">
-          Join our community and enjoy exclusive deals. Limited-time offer only for new members!
-
+          Join our community and enjoy exclusive deals. Limited-time offer only
+          for new members!
         </p>
-        <form onSubmit={OnSubmitHandler}>
+        <form onSubmit={OnSubmitHandler} className="flex w-full justify-center items-center">
           <input
             type="email"
             name="email"
@@ -29,9 +47,13 @@ const Newsletter = () => {
             placeholder="Enter Your Email"
           />
           <button
-            className="p-3 rounded-md m-2 bg-[#383528] hover:bg-[#504B38]  text-[#F8F3D9]"
+          disabled={loading}
+            className={`p-3 rounded-md m-2 bg-[#383528] hover:bg-[#504B38] flex flex-row gap-2 items-center text-[#F8F3D9] transition-all ${
+    loading ? "opacity-50 cursor-not-allowed" : "opacity-100"
+  }`}
             type="submit"
           >
+            {loading ? <Loader className="w-5 animate-spin" /> : ""}
             SUBMIT
           </button>
           <ToastContainer />

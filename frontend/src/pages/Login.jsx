@@ -25,31 +25,28 @@ const Login = () => {
       .catch((error) => console.error("Redirect error:", error));
   }, []);
 
- const googleLogin = async () => {
-  try {
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
+  const googleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
 
-    
-    const response = await axios.post(backendURL + "/api/user/google-login", {
-      email: user.email,
-      name: user.displayName,
-      profilePic: user.photoURL,
-    });
+      const response = await axios.post(backendURL + "/api/user/google-login", {
+        email: user.email,
+        name: user.displayName,
+        profilePic: user.photoURL,
+      });
 
-    if (response.data.success) {
-      setToken(response.data.token);
-      localStorage.setItem("token", response.data.token);
-      toast.success(response.data.message);
-    } else {
-      toast.error(response.data.message);
+      if (response.data.success) {
+        setToken(response.data.token);
+        localStorage.setItem("token", response.data.token);
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (err) {
+      console.error("Popup error:", err);
     }
-
-  } catch (err) {
-    console.error("Popup error:", err);
-  }
-};
-
+  };
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();

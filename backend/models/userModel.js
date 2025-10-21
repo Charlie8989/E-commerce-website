@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema(
       ],
       default: [],
     },
+   notifications: {
+    type: [{String}],   
+    default: [],
+  },
   },
   { minimize: false } //we use minimize cuz if we did'nt use this then empty cartData waala account nhi bnega
 );

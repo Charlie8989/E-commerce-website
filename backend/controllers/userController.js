@@ -106,6 +106,7 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
     });
 
+    newUser.notifications.push("New notification!");
     const user = await newUser.save();
 
     const token = createToken(user._id);

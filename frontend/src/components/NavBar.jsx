@@ -1,22 +1,39 @@
 import React, { useContext, useState } from "react";
 import { assets } from "../assets/assets";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 
 const NavBar = () => {
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
+  const [notification, setNotification] = useState(false);
+  const location = useLocation();
+
+  const isHome = location.pathname === "/";
+  const isCollection = location.pathname === "/collection";
+
   const { setShowSearch, navigate, token, setToken, setcartItems, user } =
     useContext(ShopContext);
+
+  const showNotification = () => {
+    if (notification) setNotification(false);
+    else setNotification(true);
+  };
+
+  const emojiRandomizer = () => {
+    const emojis = ["❤️", "🎉", "💫", "🔥", "😎", "✨", "🚀"];
+    return emojis[Math.floor(Math.random() * emojis.length)];
+  };
+
   const logOut = () => {
     navigate("/login");
     localStorage.removeItem("token");
     setToken("");
     setcartItems({});
   };
+  // console.log("from context",user?.photoURL);
   const { getcartCount } = useContext(ShopContext);
-  // console.log("photoURL value:", user?.photoURL);
-  // console.log("user from context:", user);
+  
   return (
     <div>
       <div className="font-medium flex items-center justify-between py-5 px-5 backdrop-blur-md">
@@ -46,12 +63,43 @@ const NavBar = () => {
           </NavLink>
         </ul>
         <div className="flex items-center gap-6">
-          <img
-            onClick={() => setShowSearch(true)}
-            src={assets.search_icon}
-            className="w-5 cursor-pointer"
-            alt=""
-          />
+          {isHome && (
+            <div onClick={showNotification} >
+              {notification && token && (
+                <div className="absolute top-15 right-20 sm:right-30 flex max-w-[70vw] sm:max-w-[48vw] flex-col items-center text-xs font-light p-4 backdrop-blur-xs bg-white/50 border-white border-2 rounded-md">
+                  <div className="my-2 flex gap-2 border-b-1 border-black/30">
+                    {emojiRandomizer()}
+                    <p className="mb-2 capitalize">
+                      Your notification will appear here !
+                    </p>
+                  </div>
+                   <div className="my-2 flex gap-2 border-b-1 border-black/30">
+                    {emojiRandomizer()}
+                    <p className="mb-2 capitalize">
+                      Your notification will appear here !
+                    </p>
+                  </div>
+                </div>
+              )}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M19 12.59V10c0-3.22-2.18-5.93-5.14-6.74C13.57 2.52 12.85 2 12 2s-1.56.52-1.86 1.26C7.18 4.08 5 6.79 5 10v2.59L3.29 14.3a1 1 0 0 0-.29.71v2c0 .55.45 1 1 1h16c.55 0 1-.45 1-1v-2c0-.27-.11-.52-.29-.71zM19 16H5v-.59l1.71-1.71a1 1 0 0 0 .29-.71v-3c0-2.76 2.24-5 5-5s5 2.24 5 5v3c0 .27.11.52.29.71L19 15.41zM14.82 20H9.18c.41 1.17 1.51 2 2.82 2s2.41-.83 2.82-2"></path>
+              </svg>
+            </div>
+          )}
+          {isCollection && (
+            <img
+              onClick={() => setShowSearch(true)}
+              src={assets.search_icon}
+              className="w-5 cursor-pointer"
+              alt=""
+            />
+          )}
           {token ? (
             <div className="relative">
               <img

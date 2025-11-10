@@ -1,9 +1,20 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { assets } from "../assets/assets";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 
 const NavBar = () => {
+  const {
+    notifications,
+    getUserNotifications,
+    setShowSearch,
+    navigate,
+    token,
+    setToken,
+    setcartItems,
+    user,
+  } = useContext(ShopContext);
+
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
   const [notification, setNotification] = useState(false);
@@ -11,14 +22,16 @@ const NavBar = () => {
 
   const isHome = location.pathname === "/";
   const isCollection = location.pathname === "/collection";
-
-  const { setShowSearch, navigate, token, setToken, setcartItems, user } =
-    useContext(ShopContext);
+  const email = user?.email;
 
   const showNotification = () => {
     if (notification) setNotification(false);
     else setNotification(true);
   };
+
+  useEffect(() => {
+    getUserNotifications(token, email);
+  }, []);
 
   const emojiRandomizer = () => {
     const emojis = ["❤️", "🎉", "💫", "🔥", "😎", "✨", "🚀"];
@@ -31,9 +44,9 @@ const NavBar = () => {
     setToken("");
     setcartItems({});
   };
-  // console.log("from context",user?.photoURL);
+  console.log("from context",user);
   const { getcartCount } = useContext(ShopContext);
-  
+
   return (
     <div>
       <div className="font-medium flex items-center justify-between py-5 px-5 backdrop-blur-md">
@@ -64,20 +77,14 @@ const NavBar = () => {
         </ul>
         <div className="flex items-center gap-6">
           {isHome && (
-            <div onClick={showNotification} >
+            <div onClick={showNotification}>
               {notification && token && (
                 <div className="absolute top-15 right-20 sm:right-30 flex max-w-[70vw] sm:max-w-[48vw] flex-col items-center text-xs font-light p-4 backdrop-blur-xs bg-white/50 border-white border-2 rounded-md">
                   <div className="my-2 flex gap-2 border-b-1 border-black/30">
                     {emojiRandomizer()}
-                    <p className="mb-2 capitalize">
-                      Your notification will appear here !
-                    </p>
-                  </div>
-                   <div className="my-2 flex gap-2 border-b-1 border-black/30">
-                    {emojiRandomizer()}
-                    <p className="mb-2 capitalize">
-                      Your notification will appear here !
-                    </p>
+                    {notifications?.map((n, i) => (
+                      <p key={i}>{n}</p>
+                    ))}
                   </div>
                 </div>
               )}

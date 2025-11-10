@@ -19,6 +19,7 @@ const ShopContextProvider = (props) => {
   const [search, setSearch] = useState("");
   const [showsearch, setShowSearch] = useState(false);
   const [cartItems, setcartItems] = useState({});
+  const [notifications, setNotifications] = useState([]);
   const [products, setProducts] = useState([]);
   const [token, setToken] = useState("");
   const navigate = useNavigate();
@@ -166,11 +167,12 @@ const ShopContextProvider = (props) => {
     }
   };
 
-  const getUserCart = async (token) => {
+  const getUserCart = async (token,email) => {
+
     try {
       const response = await axios.post(
         backendURL + "/api/cart/get",
-        {},
+        {email},
         { headers: { token } }
       );
       if (response.data.success) {
@@ -181,6 +183,25 @@ const ShopContextProvider = (props) => {
       toast.error(error.message);
     }
   };
+
+const getUserNotifications = async (token) => {
+  try {
+    const response = await axios.post(
+      backendURL + "/api/user/notification",
+      {email},
+      { headers: { token } }
+    );
+    if (response.data.success) {
+      setNotifications(response.data.notifications); 
+    }
+    console.log(response.data);
+  } catch (error) {
+    console.log(error);
+    toast.error(error.message);
+  }
+};
+
+
   useEffect(() => {
     if (token) {
       getUserCart(token);
@@ -220,6 +241,8 @@ const ShopContextProvider = (props) => {
     loading,
     user,
     sendDiscountEmail,
+    getUserNotifications,
+    notifications
   };
   return (
     <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>

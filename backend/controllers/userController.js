@@ -50,7 +50,6 @@ const loginUser = async (req, res) => {
         success: false,
       });
     }
- 
 
     const isMatch = await bcrypt.compare(password, user.password);
 
@@ -144,4 +143,30 @@ const adminLogin = async (req, res) => {
   }
 };
 
-export { loginUser, registerUser, adminLogin };
+const getNotifications = async (req, res) => {
+  const { email } = req.body;
+  const user = await userModel.findOne({ email });
+
+  if (!user) {
+    return res.json({ success: false, message: "User not found" });
+  }
+
+  console.log("Notification Here");
+
+  res.json({
+    success: true,
+    notifications: user.notifications || [],
+  });
+
+  try {
+    console.log("Notification Here");
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export { loginUser, registerUser, adminLogin, getNotifications };

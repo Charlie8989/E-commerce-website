@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import ProductItems from "../components/ProductItems";
-import { useParams } from "react-router-dom";
 
 const Collection = () => {
   const { products, search, showsearch } = useContext(ShopContext);

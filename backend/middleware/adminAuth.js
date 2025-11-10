@@ -21,7 +21,7 @@ const adminAuth = async (req, res, next) => {
       });
     }
 
-    req.user = decoded; // optional, if you want to access email in next middleware
+    req.user = decoded; 
     next();
   } catch (error) {
     console.log(error);

@@ -1,9 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { assets } from "../assets/assets";
 
 const Hero = () => {
+  const images = [
+    assets.hero_1,
+    assets.hero_2,
+    assets.hero_3,
+    assets.hero_4,
+    assets.hero_5,
+    assets.hero_6,
+    assets.hero_7,
+    assets.hero_8,
+    assets.hero_9,
+    assets.hero_10,
+    assets.hero_11,
+    assets.hero_12,
+    assets.hero_13,
+  ];
 
   const [loaded, setLoaded] = useState(false);
+  const [currImage, setImage] = useState(images[0]);
+
+  useEffect(() => {
+    const savedData = JSON.parse(localStorage.getItem("heroImageData"));
+    const now = new Date().getTime();
+
+    if (savedData && now - savedData.timestamp < 60 * 60 * 1000)
+      setImage(savedData.image);
+    else {
+      const random = Math.floor(Math.random() * images.length);
+      const newImage = images[random];
+      setImage(newImage);
+      localStorage.setItem(
+        "heroImageData",
+        JSON.stringify({ image: newImage, timestamp: now })
+      );
+    }
+  }, []);
 
   return (
     <div className="flex flex-col sm:flex-row justify-between py-5">
@@ -35,7 +68,7 @@ const Hero = () => {
         )}
 
         <img
-          src={assets.hero_2}
+          src={currImage}
           alt=""
           loading="lazy"
           onLoad={() => setLoaded(true)}

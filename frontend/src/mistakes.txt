@@ -1,0 +1,4 @@
+1. i use routes inside browserrouter in main.jsx(dont use routes in main when u pack app.jsx inside)
+i used this const ProductItems = (id, image, name, price) instead of const ProductItems = ({id, image, name, price}), react doesn't know unless u destruct properly .it treats as single object
+if u don't put the favicon on public folder then did'nt work
+my collection page grid layout was not working properly cuz i did'nt put w-full in a div which contain collection,sort and grid

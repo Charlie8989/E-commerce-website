@@ -31,7 +31,6 @@ const NavBar = () => {
     setToken("");
     setcartItems({});
   };
-  // console.log("from context",user?.photoURL);
   const { getcartCount } = useContext(ShopContext);
   
   return (

@@ -60,7 +60,7 @@ const ShopContextProvider = (props) => {
           { headers: { token } }
         );
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         toast.error(error.message);
       }
 
@@ -92,7 +92,7 @@ const ShopContextProvider = (props) => {
             totalCounts += cartItems[items][item];
           }
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       }
     }
@@ -161,7 +161,7 @@ const ShopContextProvider = (props) => {
        toast.success("Discount email sent successfully!");
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       toast.error(error.message);
     }
   };
@@ -177,7 +177,7 @@ const ShopContextProvider = (props) => {
         setcartItems(response.data.cartData);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       toast.error(error.message);
     }
   };

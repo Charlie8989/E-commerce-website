@@ -5,7 +5,7 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDrgeoJhUuagtiyqhsK5Lil6a5bfdzINFI",
-  authDomain: "trendora.ayush-codes.tech",
+  authDomain: "auth-a13d5.firebaseapp.com",
   projectId: "auth-a13d5",
   storageBucket: "auth-a13d5.firebasestorage.app",
   messagingSenderId: "856600464828",

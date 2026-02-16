@@ -19,11 +19,13 @@ const ShopContextProvider = (props) => {
   const [search, setSearch] = useState("");
   const [showsearch, setShowSearch] = useState(false);
   const [cartItems, setcartItems] = useState({});
+  const [notifications, setNotifications] = useState([]);
   const [products, setProducts] = useState([]);
   const [token, setToken] = useState("");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
+  const [profilepic, setprofilepic] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -57,7 +59,7 @@ const ShopContextProvider = (props) => {
         await axios.post(
           backendURL + "/api/cart/add",
           { itemId, size, userId },
-          { headers: { token } }
+          { headers: { token } },
         );
       } catch (error) {
         // console.log(error);
@@ -110,7 +112,7 @@ const ShopContextProvider = (props) => {
         await axios.post(
           backendURL + "/api/cart/update",
           { itemId, size, quantity },
-          { headers: { token } }
+          { headers: { token } },
         );
       } catch (error) {
         console.log(error);
@@ -119,6 +121,7 @@ const ShopContextProvider = (props) => {
     }
   };
 
+  //wow logic
   const getCartAmount = () => {
     let totalAmount = 0;
     for (const items in cartItems) {
@@ -151,27 +154,43 @@ const ShopContextProvider = (props) => {
     }
   };
 
-  const sendDiscountEmail = async (email) => {
+  const userFetchdb = async (email) => {
     try {
-      const response = await axios.post(
-        backendURL + "/api/email/discount",
-        {email}
-      );
-      if (response.data.success) {
-       toast.success("Discount email sent successfully!");
-      }
-    } catch (error) {
-      // console.log(error);
-      toast.error(error.message);
+
+      const res = await axios.post(backendURL + "/api/user/profile", { email });
+      console.log("data from context", res.data);
+      // setprofilepic(res.data.profilePic);
+    } catch (err) {
+      console.error("Error fetching user:", err);
     }
   };
 
-  const getUserCart = async (token) => {
+  const sendDiscountEmail = async (email) => {
+    try {
+      const response = await axios.post(backendURL + "/api/email/discount", {
+        email,
+      });
+
+      if (response.data.success) {
+        setUser((prev) => ({
+          ...prev,
+          isSubscribed: true,
+        }));
+
+        toast.success("Subscribed! Check your email ");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response?.data?.message || error.message);
+    }
+  };
+
+  const getUserCart = async (token, email) => {
     try {
       const response = await axios.post(
         backendURL + "/api/cart/get",
-        {},
-        { headers: { token } }
+        { email },
+        { headers: { token } },
       );
       if (response.data.success) {
         setcartItems(response.data.cartData);
@@ -181,6 +200,36 @@ const ShopContextProvider = (props) => {
       toast.error(error.message);
     }
   };
+
+  const getUserNotifications = async (token) => {
+    try {
+      const response = await axios.post(
+        backendURL + "/api/user/notification",
+        { email },
+        { headers: { token } },
+      );
+      if (response.data.success) {
+        setNotifications(response.data.notifications);
+      }
+      // console.log(response.data);
+    } catch (error) {
+      console.log(error);
+      // toast.error(error.message);
+    }
+  };
+
+  const saveUserPhone = async ( phone) => {
+    try {
+      const response = await axios.post(
+        backendURL + "/api/user/savePhone",
+        { phone },
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error.response?.data || error.message);
+    }
+  };
+
   useEffect(() => {
     if (token) {
       getUserCart(token);
@@ -220,6 +269,10 @@ const ShopContextProvider = (props) => {
     loading,
     user,
     sendDiscountEmail,
+    getUserNotifications,
+    notifications,
+    userFetchdb,
+    saveUserPhone
   };
   return (
     <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>

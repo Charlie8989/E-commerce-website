@@ -76,6 +76,17 @@ import stripe_logo from './stripe_logo.png'
 import cross_icon from './cross_icon.png'
 import hero_2 from './hero_2.jpg'
 import hero_3 from './hero_3.jpg'
+import hero_1 from './hero_1.jpg'
+import hero_4 from './hero_4.jpg'
+import hero_5 from './hero_5.jpg'
+import hero_6 from './hero_6.jpg'
+import hero_7 from './hero_7.jpg'
+import hero_8 from './hero_8.jpg'
+import hero_9 from './hero_9.jpg'
+import hero_10 from './hero_10.jpg'
+import hero_11 from './hero_11.jpg'
+import hero_12 from './hero_12.jpg'
+import hero_13 from './hero_13.jpg'
 
 export const assets = {
     logo,
@@ -98,7 +109,18 @@ export const assets = {
     cross_icon,
     smallLogo,
     hero_2,
-    hero_3
+    hero_3,
+    hero_1,
+    hero_4,
+    hero_5,
+    hero_6,
+    hero_7,
+    hero_8,
+    hero_9,
+    hero_10,
+    hero_11,
+    hero_12,
+    hero_13,
 }
 
 export const products = [

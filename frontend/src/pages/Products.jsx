@@ -1,32 +1,54 @@
 import { useParams } from "react-router-dom";
 import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
-import { assets } from "../assets/assets";
 import RealtedProducts from "../components/RealtedProducts";
+import axios from "axios";
+import { toast } from "react-toastify";
+import starIcon from "../assets/star_icon.png";
+import starDullIcon from "../assets/star_dull_icon.png";
 
 const Products = () => {
   const { productId } = useParams();
-  const { products, currency, addToCart } = useContext(ShopContext);
+  const { products, currency, addToCart, buyNow, backendURL } =
+    useContext(ShopContext);
   const [productData, setproductData] = useState(false);
   const [image, setImage] = useState(" ");
   const [size, setSize] = useState("");
 
+  const optimizeProductImage = (url, width = 900) =>
+    url?.includes("/upload/")
+      ? url.replace("/upload/", `/upload/f_auto,q_auto,w_${width}/`)
+      : url;
+
   const fetchProducts = async () => {
-    products.map((item) => {
-      if (item._id === productId) {
-        setImage(item.image[0]);
-        setproductData(item);
-        return null;
+    try {
+      const cachedProduct = products.find((item) => item._id === productId);
+
+      if (cachedProduct?.description) {
+        setImage(cachedProduct.image[0]);
+        setproductData(cachedProduct);
+        return;
       }
-    });
+
+      const response = await axios.post(backendURL + "/api/product/single", {
+        productId,
+      });
+
+      if (response.data.success && response.data.product) {
+        setImage(response.data.product.image[0]);
+        setproductData(response.data.product);
+      } else {
+        toast.error(response.data.message || "Product not found");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
   };
 
-  useEffect(
-    (item) => {
-      fetchProducts();
-    },
-    [productId,products]
-  );
+  useEffect(() => {
+    fetchProducts();
+  }, [productId,products]);
 
   return productData ? (
     <div className="border-t-2 pt-10 transition-opacity ease-in duration-500 opacity-100">
@@ -36,17 +58,20 @@ const Products = () => {
             {productData.image.map((item, index) => (
               <img
                 onClick={() => setImage(item)}
-                src={item}
+                src={optimizeProductImage(item, 180)}
                 key={index}
                 className="w-[24%] sm:w-full rounded-md sm:mb-3 flex-shrink-0 cursor-pointer"
+                loading="lazy"
+                decoding="async"
               />
             ))}
           </div>
           <div className="w-full sm:w-[80%]">
             <img
-              src={image}
+              src={optimizeProductImage(image)}
               className="rounded-md sm:rounded-xl w-full border border-gray-300 h-auto"
               alt=""
+              decoding="async"
             />
           </div>
         </div>
@@ -54,11 +79,11 @@ const Products = () => {
           <h1 className="font-medium text-2xl mt-2">{productData.name}</h1>
           <div className="flex items-center gap-1 mt-2">
             {" "}
-            <img src={assets.star_icon} alt="" className="w-3.5" />
-            <img src={assets.star_icon} alt="" className="w-3.5" />
-            <img src={assets.star_icon} alt="" className="w-3.5" />
-            <img src={assets.star_icon} alt="" className="w-3.5" />
-            <img src={assets.star_dull_icon} alt="" className="w-3.5" />
+            <img src={starIcon} alt="" className="w-3.5" />
+            <img src={starIcon} alt="" className="w-3.5" />
+            <img src={starIcon} alt="" className="w-3.5" />
+            <img src={starIcon} alt="" className="w-3.5" />
+            <img src={starDullIcon} alt="" className="w-3.5" />
             <p className="pl-2">{122}</p>
           </div>
           <p className="mt-5 text-3xl font-medium">
@@ -83,12 +108,20 @@ const Products = () => {
               ))}
             </div>
           </div>
-          <button
-            onClick={()=>addToCart(productData._id,size)}
-            className="bg-black text-white px-8 py-3  text-sm mt-4 active:bg-gray-700"
-          >
-            ADD TO CART
-          </button>
+          <div className="flex flex-col sm:flex-row gap-3 mt-4">
+            <button
+              onClick={() => addToCart(productData._id, size)}
+              className="bg-black text-white px-8 py-3 text-sm active:bg-gray-700"
+            >
+              ADD TO CART
+            </button>
+            <button
+              onClick={() => buyNow(productData._id, size)}
+              className="border border-black text-black px-8 py-3 text-sm hover:bg-[#504B38] hover:border-[#504B38] hover:text-[#F8F3D9] transition-colors"
+            >
+              BUY NOW
+            </button>
+          </div>
           <hr className="mt-8 sm:w-4/5" />
           <div className="text-sm text-gray-500 mt-5 flex flex-col gap-1">
             <p>100% Original Product</p>

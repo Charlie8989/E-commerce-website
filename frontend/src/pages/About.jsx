@@ -1,7 +1,7 @@
 import React from "react";
-import { assets } from "../assets/assets";
 import Title from "../components/Title";
 import Newsletter from '../components/Newsletter'
+import aboutImage from "../assets/about_img.png";
 
 const About = () => {
   return (
@@ -12,7 +12,7 @@ const About = () => {
       <div className="my-10 flex flex-col md:flex-row gap-16">
         <img
           className="w-full md:max-w-[450px] rounded-md border-1 border-gray-300"
-          src={assets.about_img}
+          src={aboutImage}
           alt=""
         />
         <div className="flex flex-col justify-center gap-6 md:w-2/4 text-gray-600">

@@ -1,7 +1,7 @@
 import React from "react";
 import Title from "../components/Title";
 import Newsletter from "../components/Newsletter";
-import { assets } from "../assets/assets";
+import contactImage from "../assets/contact_img.png";
 
 const Contact = () => {
   return (
@@ -12,7 +12,7 @@ const Contact = () => {
       <div className="my-10 flex flex-col justify-center md:flex-row gap-10">
         <img
           className="w-full md:max-w-[480px]  rounded-md border-1 border-gray-300"
-          src={assets.contact_img}
+          src={contactImage}
           alt=""
         />
         <div className="flex flex-col justify-center items-start  gap-6">

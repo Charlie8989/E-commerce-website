@@ -4,7 +4,6 @@ import { ShopContext } from "../context/ShopContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 import {
-  signInWithRedirect,
   getRedirectResult,
   signInWithPopup,
 } from "firebase/auth";
@@ -19,7 +18,7 @@ const Login = () => {
 
   useEffect(() => {
     getRedirectResult(auth)
-      .then((result) => {
+      .then(() => {
         // console.log("Redirect result:", result);
       })
       .catch((error) => console.error("Redirect error:", error));

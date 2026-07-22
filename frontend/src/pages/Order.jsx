@@ -10,6 +10,7 @@ const Order = () => {
   const { backendURL, token, currency } = useContext(ShopContext);
 
   const [orderData, setorderData] = useState([]);
+  const [cancellingOrderId, setCancellingOrderId] = useState("");
 
   const loadorderData = async () => {
     try {
@@ -28,6 +29,7 @@ const Order = () => {
         response.data.orders.map((order) => {
           order.items.map((item) => {
             item["status"] = order.status;
+            item["orderId"] = order._id;
             item["payment"] = order.payment;
             item["paymentMethod"] = order.paymentMethod;
             item["date"] = order.date;
@@ -39,6 +41,31 @@ const Order = () => {
     } catch (error) {
       console.log(error);
       toast.error(error.message);
+    }
+  };
+
+  const cancelOrder = async (orderId) => {
+    try {
+      if (!orderId || cancellingOrderId) return;
+
+      setCancellingOrderId(orderId);
+      const response = await axios.post(
+        backendURL + "/api/order/cancel",
+        { orderId },
+        { headers: { token } }
+      );
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+        await loadorderData();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    } finally {
+      setCancellingOrderId("");
     }
   };
 
@@ -85,12 +112,27 @@ const Order = () => {
             </div>
             <div className="md:w-1/2 flex justify-between">
               <div className="flex items-center gap-2">
-                <p className="min-w-2 h-2 rounded-full bg-green-500"></p>
+                <p
+                  className={`min-w-2 h-2 rounded-full ${
+                    item.status === "Cancelled" ? "bg-red-500" : "bg-green-500"
+                  }`}
+                ></p>
                 <p className="text-sm md:text-base">{item.status}</p>
               </div>
-              <button onClick={loadorderData} className="border text-sm font-medium px-4 py-2 rounded-sm">
-                Track Order
-              </button>
+              <div className="flex flex-col sm:flex-row gap-2">
+                {["Order placed", "Processing"].includes(item.status) && (
+                  <button
+                    onClick={() => cancelOrder(item.orderId)}
+                    disabled={cancellingOrderId === item.orderId}
+                    className="border border-red-500 text-red-600 text-sm font-medium px-4 py-2 rounded-sm disabled:opacity-60"
+                  >
+                    {cancellingOrderId === item.orderId ? "Cancelling..." : "Cancel Order"}
+                  </button>
+                )}
+                <button onClick={loadorderData} className="border text-sm font-medium px-4 py-2 rounded-sm">
+                  Track Order
+                </button>
+              </div>
             </div>
           </div>
         ))}

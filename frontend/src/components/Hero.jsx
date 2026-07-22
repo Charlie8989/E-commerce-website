@@ -1,5 +1,5 @@
 import React from "react";
-import { assets } from "../assets/assets";
+import heroImage from "../assets/hero_2.jpg";
 
 const Hero = () => {
   return (
@@ -24,10 +24,12 @@ const Hero = () => {
       {/* right side */}
       <div className="px-5 sm:px-0 w-full sm:w-1/2 ">
         <img
-          src={assets.hero_2}
+          src={heroImage}
           className="rounded-xl sm:rounded-2xl w-full h-auto object-cover"
           alt=""
-          loading="lazy"
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
         />
       </div>
     </div>

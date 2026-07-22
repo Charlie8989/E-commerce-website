@@ -1,12 +1,14 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { assets } from "../assets/assets";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 
 const NavBar = () => {
+  const location = useLocation();
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
-  const { setShowSearch, navigate, token, setToken, setcartItems, user } =
+  const [avatarBroken, setAvatarBroken] = useState(false);
+  const { setShowSearch, navigate, token, setToken, setcartItems, userProfile } =
     useContext(ShopContext);
   const logOut = () => {
     navigate("/login");
@@ -15,6 +17,13 @@ const NavBar = () => {
     setcartItems({});
   };
   const { getcartCount } = useContext(ShopContext);
+  const profileImage = userProfile?.profilePic;
+  const showSearchIcon = location.pathname === "/collection";
+
+  useEffect(() => {
+    setAvatarBroken(false);
+  }, [profileImage]);
+
   // console.log("photoURL value:", user?.photoURL);
   // console.log("user from context:", user);
   return (
@@ -46,21 +55,24 @@ const NavBar = () => {
           </NavLink>
         </ul>
         <div className="flex items-center gap-6">
-          <img
-            onClick={() => setShowSearch(true)}
-            src={assets.search_icon}
-            className="w-5 cursor-pointer"
-            alt=""
-          />
+          {showSearchIcon && (
+            <img
+              onClick={() => setShowSearch(true)}
+              src={assets.search_icon}
+              className="w-5 cursor-pointer"
+              alt="search"
+            />
+          )}
           {token ? (
             <div className="relative">
               <img
                 onClick={() => setOpen((prev) => !prev)}
-                src={user ? user?.photoURL : assets.profile_icon}
+                src={!avatarBroken && profileImage ? profileImage : assets.profile_icon}
+                onError={() => setAvatarBroken(true)}
                 alt="profile"
                 className={
-                  user
-                    ? "w-8 h-8 rounded-full border border-gray-300"
+                  !avatarBroken && profileImage
+                    ? "w-8 h-8 rounded-full border border-gray-300 object-cover cursor-pointer bg-white"
                     : "w-5 cursor-pointer"
                 }
               />
@@ -77,8 +89,10 @@ const NavBar = () => {
                     <hr className="rounded-xl" />
                     <p
                       className="hover:text-black cursor-pointer"
-                      onClick={() => setOpen(false)}
-                      to="/orders"
+                      onClick={() => {
+                        navigate("/orders");
+                        setOpen(false);
+                      }}
                     >
                       Orders
                     </p>

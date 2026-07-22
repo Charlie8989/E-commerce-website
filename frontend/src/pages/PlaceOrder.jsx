@@ -1,10 +1,11 @@
 import React, { useContext, useState } from "react";
 import Title from "../components/Title";
 import CartTotal from "../components/CartTotal";
-import { assets } from "../assets/assets";
 import { ShopContext } from "../context/ShopContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import stripeLogo from "../assets/stripe_logo.png";
+import razorpayLogo from "../assets/razorpay_logo.png";
 
 const PlaceOrder = () => {
   const [method, setMethod] = useState("cod");
@@ -17,7 +18,9 @@ const PlaceOrder = () => {
     setcartItems,
     delivery_fee,
     products,
+    userProfile,
   } = useContext(ShopContext);
+  const [selectedCoupon, setSelectedCoupon] = useState(null);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -37,9 +40,21 @@ const PlaceOrder = () => {
       setFormData((data) => ({ ...data, [name]: value }));
   };
 
+  const subtotal = getCartAmount();
+  const availableCoupons =
+    userProfile?.coupons?.filter(
+      (coupon) => new Date(coupon.expiresAt) > new Date()
+    ) || [];
+  const couponDiscount = selectedCoupon ? Math.round(subtotal * 0.2) : 0;
+  const orderAmount =
+    subtotal === 0 ? 0 : subtotal - couponDiscount + delivery_fee;
+
   const initPay = (order) => {
     const options = {
-      key: import.meta.env.VITE_RAZORPAY_TEST_KEY_ID,
+      key:
+        order.key_id ||
+        import.meta.env.VITE_RAZORPAY_KEY_ID ||
+        import.meta.env.VITE_RAZORPAY_TEST_KEY_ID,
       amount: order.amount,
       currency: order.currency,
       name: "Order Payment",
@@ -75,6 +90,7 @@ const PlaceOrder = () => {
     e.preventDefault();
     if(formData.phone.length!=10){
         toast.error("Please Enter 10 Digits Phone Number")
+        return;
     }
     try {
       let orderItems = [];
@@ -96,11 +112,12 @@ const PlaceOrder = () => {
       let orderData = {
         address: formData,
         items: orderItems,
-        amount: getCartAmount() + delivery_fee,
+        amount: orderAmount,
+        couponCode: selectedCoupon?.code || "",
       };
 
       switch (method) {
-        case "cod":
+        case "cod": {
           const response = await axios.post(
             backendURL + "/api/order/place",
             orderData,
@@ -114,8 +131,9 @@ const PlaceOrder = () => {
           }
 
           break;
+        }
 
-        case "stripe":
+        case "stripe": {
           const responseStripe = await axios.post(
             backendURL + "/api/order/stripe",
             orderData,
@@ -129,17 +147,24 @@ const PlaceOrder = () => {
             toast.error(responseStripe.data.message);
           }
           break;
+        }
 
-        case "razorpay":
+        case "razorpay": {
           const responseRazorpay = await axios.post(
             backendURL + "/api/order/razorpay",
             orderData,
             { headers: { token } }
           );
           if (responseRazorpay.data.success) {
-            initPay(responseRazorpay.data.order);
+            initPay({
+              ...responseRazorpay.data.order,
+              key_id: responseRazorpay.data.key_id,
+            });
+          } else {
+            toast.error(responseRazorpay.data.message);
           }
           break;
+        }
 
         default:
           break;
@@ -251,7 +276,58 @@ const PlaceOrder = () => {
       {/* right side  */}
       <div className="mt-8">
         <div className="mt-8 min-w-80">
-          <CartTotal />
+          <CartTotal discount={couponDiscount} />
+        </div>
+        <div className="mt-8 min-w-80 text-[#504B38]">
+          <Title text1={"AVAILABLE COUPONS"} />
+          <div className="mt-3 border border-[#b7ad87] bg-[#fbf7df] rounded-sm p-4">
+            {availableCoupons.length > 0 ? (
+              <div className="flex flex-col gap-3">
+                {availableCoupons.map((coupon) => {
+                  const isSelected = selectedCoupon?.code === coupon.code;
+                  return (
+                    <button
+                      key={coupon.code}
+                      type="button"
+                      onClick={() =>
+                        setSelectedCoupon(isSelected ? null : coupon)
+                      }
+                      className={`text-left border rounded-sm p-3 transition-colors ${
+                        isSelected
+                          ? "border-[#504B38] bg-[#F8F3D9]"
+                          : "border-[#d6cfad] bg-transparent hover:border-[#504B38]"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="font-medium tracking-wide">
+                          {coupon.code}
+                        </span>
+                        <span className="text-xs border border-[#504B38] px-2 py-1">
+                          20% OFF
+                        </span>
+                      </div>
+                      <p className="mt-2 text-xs text-[#6c654d]">
+                        Valid till {new Date(coupon.expiresAt).toDateString()}
+                      </p>
+                    </button>
+                  );
+                })}
+                {selectedCoupon && (
+                  <button
+                    type="button"
+                    onClick={() => setSelectedCoupon(null)}
+                    className="self-start text-sm underline text-[#6c654d]"
+                  >
+                    Remove coupon
+                  </button>
+                )}
+              </div>
+            ) : (
+              <p className="text-sm text-[#6c654d]">
+                No active coupons available right now.
+              </p>
+            )}
+          </div>
         </div>
         <div className="mt-12">
           <Title text1={"PAYMENT METHOD"} />
@@ -265,7 +341,7 @@ const PlaceOrder = () => {
                   method === "stripe" ? "bg-green-400" : ""
                 }`}
               ></p>
-              <img src={assets.stripe_logo} className="h-5 mx-4" alt="" />
+              <img src={stripeLogo} className="h-5 mx-4" alt="" />
             </div>
             <div
               onClick={() => setMethod("razorpay")}
@@ -276,7 +352,7 @@ const PlaceOrder = () => {
                   method === "razorpay" ? "bg-green-400" : ""
                 }`}
               ></p>
-              <img src={assets.razorpay_logo} className="h-5 mx-4" alt="" />
+              <img src={razorpayLogo} className="h-5 mx-4" alt="" />
             </div>
             <div
               onClick={() => setMethod("cod")}

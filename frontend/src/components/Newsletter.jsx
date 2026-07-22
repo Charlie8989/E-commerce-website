@@ -1,5 +1,5 @@
 import React from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { ShopContext } from "../context/ShopContext";
 import { useContext } from "react";
 import { useState } from "react";
@@ -7,6 +7,9 @@ import { Loader } from "lucide-react";
 
 const Newsletter = () => {
   const [loading, setLoading] = useState(false);
+  const [subscribed, setSubscribed] = useState(
+    localStorage.getItem("newsletterSubscribed") === "true"
+  );
   const { sendDiscountEmail } = useContext(ShopContext);
 
   const OnSubmitHandler = async (event) => {
@@ -20,14 +23,24 @@ const Newsletter = () => {
 
     try {
       setLoading(true);
-      await sendDiscountEmail(email);
-      toast.success("Discount email sent!");
+      const response = await sendDiscountEmail(email);
+      if (response.success) {
+        localStorage.setItem("newsletterSubscribed", "true");
+        setSubscribed(true);
+        toast.success(response.message || "Discount email sent!");
+      } else {
+        toast.error(response.message || "Failed to send email");
+      }
     } catch (error) {
-      toast.error("Failed to send email");
+      toast.error(error.response?.data?.message || "Failed to send email");
     } finally {
       setLoading(false);
     }
   };
+
+  if (subscribed) {
+    return null;
+  }
 
   return (
     <div>
@@ -56,7 +69,6 @@ const Newsletter = () => {
             {loading ? <Loader className="w-5 animate-spin" /> : ""}
             SUBMIT
           </button>
-          <ToastContainer />
         </form>
       </div>
     </div>

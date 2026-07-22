@@ -3,8 +3,10 @@ import {
   loginUser,
   registerUser,
   adminLogin,
-  gLogin
+  gLogin,
+  getUserProfile,
 } from "../controllers/userController.js";
+import authUser from "../middleware/auth.js";
 
 const userRouter = express.Router();
 
@@ -12,6 +14,7 @@ userRouter.post("/register", registerUser);
 userRouter.post("/login", loginUser);
 userRouter.post("/admin", adminLogin);
 userRouter.post("/google-login", gLogin);
+userRouter.post("/profile", authUser, getUserProfile);
 
 
 export default userRouter;

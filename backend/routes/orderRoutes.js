@@ -6,6 +6,7 @@ import {
   updateStatus,
   allOrders,
   userOrders,
+  cancelOrder,
   verifyStripe,
   verifyRazorpay,
 } from "../controllers/orderController.js";
@@ -29,5 +30,6 @@ orderRouter.post("/verifyRazorpay", authUser, verifyRazorpay);
 
 //User Features
 orderRouter.post("/userorders", authUser, userOrders);
+orderRouter.post("/cancel", authUser, cancelOrder);
 
 export default orderRouter;

@@ -12,7 +12,6 @@ import emailRouter from "./routes/emailRoute.js";
 //App config
 const app = express();
 const port = process.env.PORT || 4000;
-connectDB();
 connectCloudinary();
 
 //middlewares
@@ -30,4 +29,14 @@ app.get("/", (req, res) => {
   res.send("API Working...");
 });
 
-app.listen(port, () => console.log("server started on " + port));
+const startServer = async () => {
+  try {
+    await connectDB();
+    app.listen(port, () => console.log("server started on " + port));
+  } catch (error) {
+    console.error("Failed to start server:", error.message);
+    process.exit(1);
+  }
+};
+
+startServer();

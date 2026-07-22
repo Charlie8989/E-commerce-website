@@ -2,15 +2,27 @@ import { transporter } from "../config/EmailConfig.js";
 import { nanoid } from "nanoid";
 import userModel from "../models/userModel.js";
 
-const nanocode = nanoid(5).toUpperCase();
-const discountCode = `TRENDORA-${nanocode}`;
-// console.log("Discount Code :", discountCode);
-
 export const sendDiscountEmail = async (req, res) => {
   const { email } = req.body;
   // console.log("email func called",email)
   try {
     const user = await userModel.findOne({ email: email });
+
+    if (user) {
+      const hasActiveCoupon = user.coupons.some(
+        (coupon) => new Date(coupon.expiresAt) > new Date()
+      );
+
+      if (hasActiveCoupon) {
+        return res.json({
+          success: false,
+          message: "You already have an active coupon. Check your profile.",
+        });
+      }
+    }
+
+    const nanocode = nanoid(5).toUpperCase();
+    const discountCode = `TRENDORA-${nanocode}`;
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7);
 
@@ -77,10 +89,17 @@ export const sendDiscountEmail = async (req, res) => {
 `,
     });
 
-    res.status(200).json({ message: "Email sent successfully", info });
+    res.status(200).json({
+      success: true,
+      message: "Email sent successfully",
+      coupon: { code: discountCode, expiresAt },
+      info,
+    });
   } catch (error) {
     console.log("error:", error);
-    res.status(500).json({ message: "Failed to send email", error });
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to send email", error });
   }
 };
 

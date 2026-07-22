@@ -75,7 +75,13 @@ const addProduct = async (req, res) => {
 
 const listProduct = async (req, res) => {
   try {
-    const products = await productModel.find({});
+    const products = await productModel
+      .find({})
+      .select("name price image category subCategory sizes bestSeller date")
+      .sort({ date: -1 })
+      .lean();
+
+    res.set("Cache-Control", "public, max-age=60, stale-while-revalidate=300");
     res.json({ success: true, products });
   } catch (error) {
     console.log(error);
@@ -97,7 +103,7 @@ const removeProduct = async (req, res) => {
 const singleProduct = async (req, res) => {
   try {
     const { productId } = req.body;
-    const product = await productModel.findById(productId);
+    const product = await productModel.findById(productId).lean();
     res.json({
       success: true,
       product,
